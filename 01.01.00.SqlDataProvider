@@ -1,0 +1,234 @@
+﻿-- DROP EVERYTHING
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[FK_{objectQualifier}avtRedirect_{objectQualifier}Roles]') AND OBJECTPROPERTY(id, N'IsForeignKey') = 1)
+    ALTER TABLE {databaseOwner}[{objectQualifier}avtRedirect] DROP CONSTRAINT [FK_{objectQualifier}avtRedirect_{objectQualifier}Roles]
+GO
+
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}avtRedirect_GetRedirects]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_GetRedirects]
+GO
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}avtRedirect_UpdateRedirect]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_UpdateRedirect]
+GO
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}avtRedirect_RemoveRedirect]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_RemoveRedirect]
+GO
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}avtRedirect_RemoveRedirectById]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_RemoveRedirectById]
+GO
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}avtRedirect_IncreasePriority]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_IncreasePriority]
+GO
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}avtRedirect_DecreasePriority]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_DecreasePriority]
+GO
+
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}avtRedirect]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+    DROP TABLE {databaseOwner}[{objectQualifier}avtRedirect]
+GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}avtRedirectActivation]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
+    DROP TABLE {databaseOwner}[{objectQualifier}avtRedirectActivation]
+GO
+
+
+
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE {databaseOwner}[{objectQualifier}avtRedirect](
+	[RedirectId] [int] IDENTITY(1,1) NOT NULL,
+	[RoleID] [int] NULL,
+	[RoleAllUsers] [int] NOT NULL CONSTRAINT [DF_{objectQualifier}avtRedirect_RoleAllUsers]  DEFAULT ((0)),
+	[RoleUnregisteredUsers] [int] NOT NULL CONSTRAINT [DF_{objectQualifier}avtRedirect_RoleUnregisteredUsers]  DEFAULT ((0)),
+	[RedirectUrl] [nvarchar](1024) NOT NULL,
+	[RedirectPriority] [int] NOT NULL CONSTRAINT [DF_{objectQualifier}avtRedirect_Priority]  DEFAULT ((0)),
+ CONSTRAINT [PK_{objectQualifier}avtRedirect] PRIMARY KEY CLUSTERED 
+(
+	[RedirectId] ASC
+)
+) ON [PRIMARY]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE TABLE {databaseOwner}[{objectQualifier}avtRedirectActivation](
+	[RegistrationCode] [nvarchar](100) NOT NULL,
+	[Host] [nvarchar](255) NOT NULL,
+	[ActivationCode] [nvarchar](1024) NOT NULL,
+	[ProductKey] [nvarchar](1024) NOT NULL,
+	[BaseProductCode] [nvarchar](50) NOT NULL,
+	[BaseProductVersion] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_{objectQualifier}avtRedirectActivation] PRIMARY KEY CLUSTERED 
+(
+	[RegistrationCode] ASC,
+	[Host] ASC
+)
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE procedure {databaseOwner}[{objectQualifier}avtRedirect_GetRedirects]
+
+	@portalId int
+
+as
+
+	SELECT AVTR.*, 
+		(CASE WHEN AVTR.RoleID IS NULL THEN 
+			(CASE WHEN RoleAllUsers = 1 THEN 'All Users' ELSE 'Unregistered Users' END) 
+			ELSE R.RoleName END) as RoleName 
+	FROM {databaseOwner}{objectQualifier}avtRedirect AVTR
+	LEFT JOIN {objectQualifier}Roles R on R.RoleID = AVTR.RoleID
+	WHERE (R.PortalID = @portalId OR AVTR.RoleId IS NULL)
+	ORDER BY AVTR.RedirectPriority DESC
+
+
+ 
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_UpdateRedirect]
+
+	@roleId				int,
+	@allUsers			int,
+	@unregisteredUsers	int,
+	@url				nvarchar(1024)
+
+AS
+
+IF @roleId <= 0
+	SET @roleId = NULL
+
+IF @roleId IS NULL
+BEGIN
+	IF @allUsers=1 AND EXISTS (SELECT RedirectId FROM {databaseOwner}{objectQualifier}avtRedirect WHERE RoleID IS NULL AND RoleAllUsers = 1)
+		UPDATE {databaseOwner}{objectQualifier}avtRedirect
+			SET    RedirectUrl = @url
+			WHERE  RoleID IS NULL AND RoleAllUsers = 1
+	ELSE 
+	BEGIN
+		IF @unregisteredUsers = 1 AND EXISTS (SELECT RedirectId FROM {databaseOwner}{objectQualifier}avtRedirect WHERE RoleID IS NULL AND RoleUnregisteredUsers = 1)
+			UPDATE {databaseOwner}{objectQualifier}avtRedirect
+				SET    RedirectUrl = @url
+				WHERE  RoleID IS NULL AND RoleUnregisteredUsers = 1
+		ELSE
+			INSERT INTO {databaseOwner}{objectQualifier}avtRedirect(RoleId, RedirectUrl, RoleAllUsers, RoleUnregisteredUsers) VALUES(@roleId, @url, @allUsers, @unregisteredUsers)
+	END
+END
+ELSE
+BEGIN
+	IF EXISTS (SELECT RedirectId FROM {databaseOwner}{objectQualifier}avtRedirect WHERE RoleID = @roleId)
+		UPDATE {databaseOwner}{objectQualifier}avtRedirect
+			SET    RedirectUrl = @url
+			WHERE  RoleID = @roleId
+	ELSE
+		INSERT INTO {databaseOwner}{objectQualifier}avtRedirect(RoleId, RedirectUrl) VALUES(@roleId, @url)
+END
+
+
+
+
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_RemoveRedirect]
+
+	@roleId				int,
+	@allUsers			int,
+	@unregisteredUsers	int
+
+AS
+
+IF @roleId <= 0
+	SET @roleId = NULL
+
+IF @roleId IS NOT NULL
+	DELETE FROM {databaseOwner}{objectQualifier}avtRedirect WHERE RoleID = @roleId
+ELSE
+	DELETE FROM {databaseOwner}{objectQualifier}avtRedirect 
+		WHERE RoleID IS NULL AND RoleAllUsers = @allUsers AND RoleUnregisteredUsers = @unregisteredUsers
+
+ 
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_RemoveRedirectById]
+
+	@redirectId		int
+
+AS
+
+	DELETE FROM {databaseOwner}{objectQualifier}avtRedirect WHERE RedirectID = @redirectId
+
+ 
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_IncreasePriority]
+
+	@redirectId		int
+
+AS
+
+	UPDATE {databaseOwner}{objectQualifier}avtRedirect SET RedirectPriority = RedirectPriority + 1 
+	WHERE RedirectID = @redirectId
+
+
+ 
+
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}avtRedirect_DecreasePriority]
+
+	@redirectId		int
+
+AS
+
+	UPDATE {databaseOwner}{objectQualifier}avtRedirect SET RedirectPriority = RedirectPriority - 1 
+	WHERE RedirectID = @redirectId
+
+ 
+
+GO
+

@@ -1,0 +1,11 @@
+DesktopModules\avt.DnnRedirect\Activation.aspx
+DesktopModules\avt.DnnRedirect\act\bk.png
+DesktopModules\avt.DnnRedirect\act\btn_cancel.png
+DesktopModules\avt.DnnRedirect\act\btn_next.png
+DesktopModules\avt.DnnRedirect\act\btn_purchase.png
+DesktopModules\avt.DnnRedirect\act\icon_help.png
+DesktopModules\avt.DnnRedirect\act\icon_help_over.png
+DesktopModules\avt.DnnRedirect\act\style.css
+DesktopModules\avt.DnnRedirect\act\
+DesktopModules\avt.DnnRedirect\down.gif
+DesktopModules\avt.DnnRedirect\up.gif
