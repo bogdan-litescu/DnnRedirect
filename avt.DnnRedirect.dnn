@@ -7,7 +7,7 @@
       <modulename>avt.DnnRedirect</modulename>
       <description>
       </description>
-      <version>01.06.01</version>
+      <version>01.07.00</version>
       <businesscontrollerclass>avt.Redirect.RedirectController</businesscontrollerclass>
       <resourcefile>Resources.zip</resourcefile>
       <modules>
@@ -43,25 +43,25 @@
           <name>Manage.ascx</name>
         </file>
         <file>
-          <name>01.01.00.SqlDataProvider</name>
+          <name>DataProviders/SqlDataProvider/01.01.00.SqlDataProvider</name>
         </file>
         <file>
-          <name>01.04.01.SqlDataProvider</name>
+          <name>DataProviders/SqlDataProvider/01.04.01.SqlDataProvider</name>
         </file>
         <file>
-          <name>01.04.02.SqlDataProvider</name>
+          <name>DataProviders/SqlDataProvider/01.04.02.SqlDataProvider</name>
         </file>
         <file>
-          <name>01.04.03.SqlDataProvider</name>
+          <name>DataProviders/SqlDataProvider/01.04.03.SqlDataProvider</name>
         </file>
         <file>
-          <name>01.05.01.SqlDataProvider</name>
+          <name>DataProviders/SqlDataProvider/01.05.01.SqlDataProvider</name>
         </file>
         <file>
-          <name>01.06.00.SqlDataProvider</name>
+          <name>DataProviders/SqlDataProvider/01.06.00.SqlDataProvider</name>
         </file>
         <file>
-          <name>Uninstall.SqlDataProvider</name>
+          <name>DataProviders/SqlDataProvider/Uninstall.SqlDataProvider</name>
         </file>
       </files>
     </folder>
