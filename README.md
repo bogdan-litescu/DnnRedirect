@@ -1,5 +1,5 @@
-DNN Redirect
-============
+DNN Redirect by [DNN Sharp](http://www.dnnsharp.com)
+===================================================
 
 ## Why is DNN Redirect FREE?
 
