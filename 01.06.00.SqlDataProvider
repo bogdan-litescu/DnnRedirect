@@ -1,4 +1,0 @@
-﻿IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}avtRedirectActivation]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)
-    DROP TABLE {databaseOwner}[{objectQualifier}avtRedirectActivation]
-GO
-

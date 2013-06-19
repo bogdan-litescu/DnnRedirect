@@ -66,6 +66,7 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="01.06.00.txt" />
     <Content Include="Manage.ascx" />
     <Content Include="Main.ascx" />
   </ItemGroup>
@@ -93,6 +94,21 @@
   <ItemGroup>
     <Content Include="App_LocalResources\Main.ascx.resx" />
     <Content Include="module.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataProviders\SqlDataProvider\01.01.00.SqlDataProvider" />
+    <Content Include="DataProviders\SqlDataProvider\01.04.01.SqlDataProvider" />
+    <Content Include="DataProviders\SqlDataProvider\01.04.02.SqlDataProvider" />
+    <Content Include="DataProviders\SqlDataProvider\01.04.03.SqlDataProvider" />
+    <Content Include="DataProviders\SqlDataProvider\01.05.01.SqlDataProvider" />
+    <Content Include="DataProviders\SqlDataProvider\01.06.00.SqlDataProvider" />
+    <Content Include="DataProviders\SqlDataProvider\Uninstall.SqlDataProvider" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="avt.DnnRedirect.dnn" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="README.md" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
