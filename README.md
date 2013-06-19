@@ -12,9 +12,9 @@ So we decided to start from scratch with a better architecture, and Redirect Too
 And now we feel that instead of throwing DNN Redirect away we should give it for FREE to the community, promoting Redirect Toolkit and our other modules altogether.
 If you need more, make sure to:
 
-1. [read what Redirect Toolkit brings to the table](http://www.dnnsharp.com/upgrade-benefits/dnn-redirect)
-2. [download Redirect Toolkit free trial](http://www.dnnsharp.com/dotnetnuke/modules/dnn-redirect/redirect-toolkit/download)
-3. [follow us on Twitter to stay connected](http://twitter.com/dnnsharp) 
+1. [Read what Redirect Toolkit brings to the table](http://www.dnnsharp.com/upgrade-benefits/dnn-redirect)
+2. [Download Redirect Toolkit free trial](http://www.dnnsharp.com/dotnetnuke/modules/dnn-redirect/redirect-toolkit/download)
+3. [Follow us on Twitter to stay connected](http://twitter.com/dnnsharp) 
 
 
 ## Installing DNN Redirect
