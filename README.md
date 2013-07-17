@@ -25,6 +25,7 @@ This will take care to create the module definition and install the required tab
 If you also need the source code, you can checkout this repository in the same folder.
 Compiling the solution will put the assemblies in the website /bin folder.
 
+For more information <a href="http://bogdan-litescu.github.io/DnnRedirect/docs.html">read the documentation</a>.
 
 <div style="float: right; text-align: right;">
   <a href="http://www.dnnsharp.com"><img src="http://static.dnnsharp.com/logo/dnnsharp-v2-100.png" title="DNN Sharp" /></a>&nbsp;&nbsp;
